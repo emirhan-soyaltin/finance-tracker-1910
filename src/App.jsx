@@ -12,6 +12,7 @@ const App = () => {
  let currencyValue = Object.values(currencyData)
  const [amount, setAmount] = useState("")
  const [rate, setRate] = useState("")
+ const [showOperation, setShowOperation] = useState([])
 
  
 
@@ -26,11 +27,15 @@ useEffect(() => {
       
     }, [])
     const operations = [
-      { type: "Income", amount: setAmount, rate: setRate },
-      { type: "Expense", amount: setAmount, rate: setRate },
+      { type: "Income", amount: amount, rate: rate },
+      { type: "Expense", amount: amount, rate: rate },
       
     ];
    
+
+
+
+console.log(showOperation)
     
   return (
     <div style={{minHeight: '100vh'}}>
@@ -39,6 +44,9 @@ useEffect(() => {
     currencyName={currencyName}
     currencyValue={currencyValue}
     operations={operations}
+    
+    showOperation={showOperation}
+    setShowOperation={setShowOperation}
     
     />
     </div>

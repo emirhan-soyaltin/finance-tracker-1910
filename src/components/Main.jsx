@@ -10,7 +10,7 @@ import { DeleteForever, Edit } from '@mui/icons-material'
 
 
 
-const Main = ({currencyName, currencyValue, operations, }) => {
+const Main = ({currencyName, currencyValue, operations, showOperation, setShowOperation, }) => {
   const [selectedCurrency, setSelectedCurrency] = useState(currencyName)
   const [total, setTotal] = useState("")
   const [showEnterModal, setShowEnterModal] = useState(false)
@@ -25,16 +25,10 @@ const Main = ({currencyName, currencyValue, operations, }) => {
   const [validCurrency, setValidCurrency] = useState(true)
   const [totalOperations, setTotalOperations] = useState([])
   const [currencyAmount, setCurrencyAmount] = useState(currencyValue)
-  const [showOperation, setShowOperation] = useState([])
   
+  const [operate, setOperate] = useState([])
 
- 
-  useEffect(() => {
-    let ops = [...operations];
-    
-    setShowOperation(ops);
-    
-  }, [operations]);
+
 
 
 
@@ -76,7 +70,7 @@ const Main = ({currencyName, currencyValue, operations, }) => {
   useEffect(() => {
     let valid = true;
 
-    if (enterAmount > 100000 || enterAmount <= 0) {
+    if (enterAmount > 10000000 || enterAmount <= 0) {
       valid = false;
     }
     if (!validCurrency) {
@@ -95,20 +89,38 @@ const setNewOperation = (type, amount, rate, explanation) => {
   setTotalOperations(prevOperations => [...prevOperations, newOperation]);
 };
 
-const submitHandler = () => {
-  const newOperation = {
-    type: enterType,
-    amount: Number(enterAmount),
-    rate: currencyValue,
-    explanation: enterExplanation
-  };
-    
-  setNewOperation(enterType, Number(enterAmount), currencyValue, enterExplanation);
-    
-  setEnterAmount("");
-  setEnterExplanation("");
+
+const handleFormSubmit = (event) => {
+  event.preventDefault();
+
+  
+  submitHandler({
+    enterType,
+    enterAmount,
+    enterExplanation,
+    selectedCurrency
+  });
+
+ 
+  setShowOperation({
+    enterType,
+    enterAmount,
+    enterExplanation,
+    selectedCurrency
+  });
+
+  setEnterAmount('');
+  setEnterExplanation('');
+  setSelectedCurrency('');
   setShowEnterModal(false);
 };
+const submitHandler = (data) => {
+
+  setShowOperation([...showOperation, data]);
+};
+
+
+
 const editOperation = (id, type, amount, rate, explanation) => {
   const newOperations = totalOperations.map((operation) => {
     if (operation.id === id) {
@@ -181,6 +193,11 @@ const handleDelete = (id) => {
      setEnterExplanation={setEnterExplanation}
      DeleteForever={DeleteForever}
      Edit={Edit}
+     enterType={enterType}
+     enterAmount={enterAmount}
+     selectedCurrency={selectedCurrency}
+     enterExplanation={enterExplanation}
+     operate={operate}
 
     />
     </div>
@@ -189,7 +206,7 @@ const handleDelete = (id) => {
     <EnterModal 
     showEnterModal={showEnterModal}
     setShowEnterModal={setShowEnterModal}
-    submitHandler={submitHandler}
+    handleFormSubmit={handleFormSubmit}
     submitDisabled={submitDisabled}
     enterType={enterType}
     enterAmount={enterAmount}

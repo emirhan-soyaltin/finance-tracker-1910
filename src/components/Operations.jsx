@@ -10,8 +10,14 @@ const Operations = ({
     setEnterExplanation,
     DeleteForever,
     Edit,
-    deleteOperation
+    deleteOperation,
+    enterType,
+    enterExplanation,
+    enterAmount,
+    selectedCurrency,
+    operate
 }) => {
+  
   return (
     <div >
     <div className='m-0 bg-myblack mx-8 rounded-lg md:bg-cover ' style={{minHeight:'89vh'}} >
@@ -36,56 +42,24 @@ const Operations = ({
           <div>
           {showOperation.length === 0 ? (
               <>
-                <h4 className="text-2xl">No match...</h4>
+                <h4 className="text-2xl text-white">No match...</h4>
               </>
             ) : (
-              <></>
+              <>
+              <div>
+      {showOperation.map((operation, index) => (
+        <div key={index}>
+          <p>Type: {operation.enterType}</p>
+          <p>Amount: {operation.enterAmount}</p>
+          <p>Explanation: {operation.enterExplanation}</p>
+          <p>Currency: {operation.selectedCurrency}</p>
+        </div>
+      ))}
+    </div>
+              </>
             )}
-            {showOperation
-              .slice(0)
-              .reverse()
-              .map((item) => {
-                return (
-                  <div
-                    key={item[0]}
-                    className={`${
-                      item[1] === "Income" ? "bg-green-200" : "bg-red-200"
-                    } text-gray-900 p-4 rounded-xl my-4 flex justify-between`}
-                    style={{ maxWidth: "80vw", width: "500px", color: 'white'}}
-                  >
-                    <div>
-                      <div>
-                        Type: {item[1]}, Amount: {item[2]}
-                        {item[3]}, Explanation: {item[4]}
-                      </div>
-                      <div className="opacity-50">{`${new Date(item[0])}`}</div>
-                    </div>
-                    <div className="flex flex-col justify-center items-center">
-                      <div
-                        className="m-1 text-lg cursor-pointer"
-                        onClick={() => {
-                          setShowEditModal(true);
-                          setEditId(item[0]);
-                          setEnterType(item[1]);
-                          setEnterAmount(item[2]);
-                          setCurrencyAmount(item[3]);
-                          setEnterExplanation(item[4]);
-                        }}
-                      >
-                        <Edit/>
-                      </div>
-                      <div
-                        className="m-1 text-lg cursor-pointer"
-                        onClick={() => {
-                          deleteOperation(item[0]);
-                        }}
-                      >
-                        <DeleteForever/>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+            
+               
               </div>
               </div>
         </section>
